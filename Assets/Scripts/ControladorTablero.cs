@@ -9,6 +9,8 @@ public class ControladorTablero : MonoBehaviour
     public Text puntos;
     public Text maxPuntos;
     public Text textoPausa;
+    public Image imagenSiguiente;
+    public Sprite [] tipo = new Sprite[7];
 
     private const int FILAS = 21;
     private const int COLUMNAS = 12;
@@ -19,7 +21,7 @@ public class ControladorTablero : MonoBehaviour
     private const int PIEZA_ACTUAL = 2;
     private const int PIEZA_MUERTA = 1;
 
-    private Pieza pieza = new Pieza(1);
+    private Pieza pieza;
     private ModeloTetris modelo;
 
     private bool actuar;
@@ -37,6 +39,7 @@ public class ControladorTablero : MonoBehaviour
             };
     void Start ()
     {
+        pieza = new Pieza(Random.Range(0, 7), Random.Range(0, 7));
         textoPausa.enabled = false;
 
         actuar = true;
@@ -115,7 +118,7 @@ public class ControladorTablero : MonoBehaviour
         lineas.text = "Lineas: " + modelo.getLineas();
         puntos.text = "Puntos: " + modelo.getPuntuacion();
         maxPuntos.text = "Record: " + modelo.getMaxPuntuacion();
-
+        imagenSiguiente.sprite = tipo[pieza.getNextTipo()];
         for (int i = 0; i < FILAS; i++)
         {
             for (int j = 0; j < COLUMNAS; j++)
@@ -264,12 +267,14 @@ public class ControladorTablero : MonoBehaviour
         private Posicion[] posiciones  = new Posicion[4];
         private Posicion [] posicionesNuevas = new Posicion[4];
         private int tipo;
+        private int nextTipo;
         private int estado;
         private ModeloTetris modelo;
 
-        public Pieza(int tipo)
+        public Pieza(int tipo, int nextTipo)
         {
             this.tipo = tipo;
+            this.nextTipo = nextTipo;
             modelo = ModeloTetris.getModelo();
             posiciones = new Posicion[NUM_POSICIONES];
             posicionesNuevas = new Posicion[NUM_POSICIONES];
@@ -419,6 +424,11 @@ public class ControladorTablero : MonoBehaviour
         public int getTipo()
         {
             return tipo;
+        }
+
+        public int getNextTipo()
+        {
+            return nextTipo;
         }
 
         public bool contenida(int x, int y)
@@ -1480,7 +1490,8 @@ public class ControladorTablero : MonoBehaviour
                 modelo.setValor(posiciones[i].getX(), posiciones[i].getY(), PIEZA_MUERTA);
             }
             modelo.comprobarFin();
-            tipo = Random.Range(0, 7);
+            tipo = nextTipo;
+            nextTipo = Random.Range(0, 7);
             //tipo = 1;
             inicializarPieza();
         }
