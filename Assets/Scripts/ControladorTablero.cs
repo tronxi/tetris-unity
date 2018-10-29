@@ -95,6 +95,15 @@ public class ControladorTablero : MonoBehaviour
         dibujar();
     }
 
+    public void trampa()
+    {
+        if(pausado)
+        {
+            pieza.setNextTipo(1);
+            dibujar();
+        }
+    }
+
     public void pausar()
     {
         if(Time.timeScale == 1)
@@ -430,6 +439,11 @@ public class ControladorTablero : MonoBehaviour
         public int getNextTipo()
         {
             return nextTipo;
+        }
+
+        public void setNextTipo(int tipo)
+        {
+            nextTipo = tipo;
         }
 
         public bool contenida(int x, int y)
