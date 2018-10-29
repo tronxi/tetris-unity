@@ -119,6 +119,7 @@ public class ControladorTablero : MonoBehaviour
         puntos.text = "Puntos: " + modelo.getPuntuacion();
         maxPuntos.text = "Record: " + modelo.getMaxPuntuacion();
         imagenSiguiente.sprite = tipo[pieza.getNextTipo()];
+
         for (int i = 0; i < FILAS; i++)
         {
             for (int j = 0; j < COLUMNAS; j++)
@@ -1518,7 +1519,8 @@ public class ControladorTablero : MonoBehaviour
 
         private void inicializar()
         {
-            velocidad = 1.0f;
+            velocidad = 0.8f;
+            
             puntuacion = 0;
             lineas = 0;
             for (int i = 0; i < tetris.GetLength(0); i++)
@@ -1654,15 +1656,48 @@ public class ControladorTablero : MonoBehaviour
                     borrarLinea(i);
                 }
             }
-            puntuacion += puntosaux * 100;
+            puntuacion += calcularPuntuacion(puntosaux, velocidad);
+
             setMaxPuntuacion(puntuacion);
         }
+        public int calcularPuntuacion(int lineas, float velocidad)
+        {
+            float aux = 0;
 
+            if (lineas == 1)
+            {
+                aux = (lineas / velocidad) * 10;
+            }
+            else if (lineas == 2)
+            {
+                aux = (2.5f / velocidad) * 10;
+            }
+            else if (lineas == 3)
+            {
+                aux = (3.5f / velocidad) * 10;
+            }
+            else if (lineas == 4)
+            {
+                aux = (5 / velocidad) * 10;
+            }
+            return (int)System.Math.Round(aux);
+        }
         private void borrarLinea(int linea)
         {
-            if(velocidad - 0.1f >= 0.1f)
+            if (lineas % 10 == 0)
             {
-                velocidad -= 0.1f;
+                if (velocidad - 0.10f >= 0.10f)
+                {
+                    velocidad -= 0.10f;
+                }
+                else
+                {
+                    if (velocidad - 0.010f > 0f)
+                    {
+                        velocidad -= 0.010f;
+                    }
+                }
+                velocidad = (float) System.Math.Round(velocidad, 2);
             }
             
             for (int i = 0; i < tetris.GetLength(1); i++)
