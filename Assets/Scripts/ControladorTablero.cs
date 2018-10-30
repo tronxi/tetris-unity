@@ -1533,7 +1533,7 @@ public class ControladorTablero : MonoBehaviour
 
         private void inicializar()
         {
-            velocidad = 0.8f;
+            velocidad = 1.0f;
             
             puntuacion = 0;
             lineas = 0;
@@ -1703,15 +1703,17 @@ public class ControladorTablero : MonoBehaviour
                 if (velocidad - 0.10f >= 0.10f)
                 {
                     velocidad -= 0.10f;
+                    velocidad = (float) System.Math.Round(velocidad, 2);
                 }
                 else
                 {
-                    if (velocidad - 0.010f > 0f)
+                    if (velocidad - 0.0010f > 0f)
                     {
-                        velocidad -= 0.010f;
+                        velocidad -= 0.0010f;
+                        velocidad = (float) System.Math.Round(velocidad, 3);
                     }
                 }
-                velocidad = (float) System.Math.Round(velocidad, 2);
+                Debug.Log(velocidad);
             }
             
             for (int i = 0; i < tetris.GetLength(1); i++)
